@@ -1,4 +1,3 @@
-
 from pathlib import Path
 
 import pandas as pd
@@ -7,21 +6,39 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
 from agent.graphh import copilot_graph
+from agent.quality_service import profile_csv
+
 load_dotenv()
+
 app = FastAPI(title="AI Data Copilot Agent API")
+
+
 class CopilotRequest(BaseModel):
     question: str = Field(min_length=1, max_length=2000)
     csv_path: str = Field(min_length=1)
+
+
+class QualityRequest(BaseModel):
+    csv_path: str = Field(min_length=1)
+
+
 @app.get("/health")
 def health():
-    return {"success": True, "service": "AI Data Copilot Agent"}
+    return {
+        "success": True,
+        "service": "AI Data Copilot Agent",
+    }
+
 
 @app.post("/ask")
 def ask_copilot(request: CopilotRequest):
     csv_file = Path(request.csv_path).expanduser().resolve()
 
     if not csv_file.is_file():
-        raise HTTPException(status_code=404, detail="Dataset file not found")
+        raise HTTPException(
+            status_code=404,
+            detail="Dataset file not found",
+        )
 
     if csv_file.suffix.lower() != ".csv":
         raise HTTPException(
@@ -65,9 +82,40 @@ def ask_copilot(request: CopilotRequest):
 
     except HTTPException:
         raise
+
     except Exception as exc:
         print("Agent API error:", str(exc))
         raise HTTPException(
             status_code=500,
             detail="Failed to process the dataset question",
+        ) from exc
+
+
+@app.post("/quality")
+def get_data_quality(request: QualityRequest):
+    try:
+        report = profile_csv(request.csv_path)
+
+        return {
+            "success": True,
+            "report": report,
+        }
+
+    except FileNotFoundError as exc:
+        raise HTTPException(
+            status_code=404,
+            detail=str(exc),
+        ) from exc
+
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=400,
+            detail=str(exc),
+        ) from exc
+
+    except Exception as exc:
+        print("Data quality error:", str(exc))
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to generate the data quality report",
         ) from exc

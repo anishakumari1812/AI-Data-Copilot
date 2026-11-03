@@ -1382,3 +1382,159 @@ and initial AI Copilot integration.
 23. Copilot receives verified dataset analytics as context.
 24. AI responses are generated through POST /api/copilot/query.
 25. Next step: improve AI response accuracy and prevent statistical hallucinations.
+
+ 
+
+---
+
+# AI DATA COPILOT — LATEST PROJECT PROGRESS UPDATE
+
+**Update Date:** 16 October 2026  
+**Project:** AI Data Quality Copilot  
+**Repository:** https://github.com/keshav-pali/AI_Data_Copilot  
+**Latest Commit:** `8e9585e`
+
+## 1. Current Project Status
+
+The project has progressed from a frontend prototype to an integrated application with backend APIs and an initial AI-powered data-querying workflow.
+
+The latest implementation includes frontend-backend integration, user authentication, dataset management, file processing, analytics and a Python-based AI Copilot service.
+
+## 2. Frontend Integration — Completed
+
+The following frontend updates have been implemented:
+
+1. Integrated authentication state using `AuthContext.jsx`.
+2. Added centralized API communication through `services/api.js`.
+3. Connected authentication operations through `authService.js`.
+4. Connected dataset operations through `datasetService.js`.
+5. Connected analytics operations through `analyticsService.js`.
+6. Updated the Login page to work with backend authentication.
+7. Updated the Upload Data page to communicate with dataset APIs.
+8. Updated Dashboard and Analytics pages to use backend-provided data.
+9. Updated the AI Copilot interface to load available datasets and submit user questions.
+10. Updated the DataTable component to support the integrated data flow.
+
+The existing React and Vite application structure and visual design have been retained while integrating the APIs.
+
+## 3. Backend — Implemented Features
+
+The backend is built using Node.js, Express.js, MongoDB Atlas and Mongoose.
+
+Implemented functionality includes:
+
+1. Express server and environment configuration.
+2. MongoDB Atlas connection.
+3. User registration and login.
+4. Password hashing using bcrypt.
+5. JWT-based authentication and protected routes.
+6. Dataset ownership verification.
+7. Dataset upload using Multer.
+8. CSV, JSON, XLSX and XLS file parsing.
+9. Dataset metadata storage and retrieval.
+10. Dataset listing, details and deletion.
+11. File validation and upload size restrictions.
+12. Dataset profiling and analytics.
+13. Numeric statistics, including mean, median, minimum, maximum and standard deviation.
+14. Missing-value and categorical analysis.
+15. Correlation analysis between numeric columns.
+16. AI Copilot API integration.
+
+## 4. Python AI Agent — Initial Workflow Implemented
+
+A separate Python-based service has been added under the `agent/` directory.
+
+Important files include:
+
+- `api.py` — FastAPI endpoints for the AI agent.
+- `graphh.py` — LangGraph workflow.
+- `state.py` — Workflow state definition.
+- `sql_generator.py` — Natural-language question to SQL generation.
+- `sql_validator.py` — SQL validation.
+- `sql_executor.py` — SQL execution against an in-memory SQLite representation of CSV data.
+- `schema_service.py` — Reserved for schema-related functionality; currently empty.
+
+The Python service uses an OpenAI-compatible SDK with OpenRouter for LLM access.
+
+### AI Copilot Workflow
+
+User Question → Dataset Verification → SQL Generation → SQL Validation → SQLite Execution → Result Processing → Answer Generation → Frontend Display
+
+The backend verifies dataset ownership and availability before forwarding the dataset path and question to the Python service.
+
+## 5. Natural-Language Data Querying — Demonstrated
+
+The AI Copilot can accept questions in natural language and use generated SQL to query an uploaded CSV dataset.
+
+**Test dataset:** `shri.csv`
+
+- Rows: 15
+- Columns: 7
+- Example question: “Which product generated the highest revenue?”
+- Demonstrated result: Office Chair
+- Revenue: 8900
+
+This test demonstrates the initial natural-language-to-SQL workflow. It does not establish accuracy across all datasets or question types.
+
+## 6. Current Data Storage Architecture
+
+- **MongoDB Atlas:** User accounts and dataset metadata.
+- **Backend local storage:** Uploaded dataset files.
+- **Python and pandas:** CSV loading and data preparation.
+- **SQLite:** Temporary query execution environment.
+- **OpenRouter:** LLM access for AI-assisted querying and responses.
+- **Browser local storage:** Authentication token and related client-side state, according to the current frontend implementation.
+
+Local file storage is suitable for the current development prototype but requires a more durable storage solution for production deployment.
+
+## 7. GitHub Integration
+
+The latest changes have been committed and pushed to the GitHub repository.
+
+- Backend branch: `backend`
+- Main branch: `main`
+- Latest integrated commit: `8e9585e`
+- Commit message: `Integrate AI Copilot with frontend and backend`
+
+The backend branch changes were merged into the main branch through a fast-forward update. The push to `origin/main` completed successfully.
+
+Repository: https://github.com/keshav-pali/AI_Data_Copilot
+
+## 8. Remaining Work and Future Improvements
+
+The following areas require further implementation, verification or improvement:
+
+1. Improve AI response accuracy and reduce statistical hallucinations.
+2. Handle invalid SQL and execution failures reliably.
+3. Add broader automated tests for the complete frontend-backend-agent workflow.
+4. Evaluate SQL generation accuracy on diverse datasets and questions.
+5. Improve data-quality reporting and issue explanations.
+6. Implement a complete cleaning workflow with user-reviewed corrections.
+7. Improve scalability for large datasets.
+8. Introduce durable cloud or object storage for uploaded files.
+9. Strengthen SQL safeguards, API security, rate limiting and logging.
+10. Improve deployment configuration and production monitoring.
+11. Verify that every frontend page uses the appropriate live API rather than mock data.
+12. Complete and test any remaining settings persistence and user-preference functionality.
+
+## 9. Updated Development Status
+
+- Frontend UI: **Implemented**
+- Backend foundation and authentication: **Implemented**
+- Dataset upload and management: **Implemented**
+- File parsing and profiling: **Implemented**
+- Analytics APIs: **Implemented**
+- Frontend-backend integration: **Implemented; further end-to-end verification required**
+- Python AI agent: **Initial workflow implemented**
+- Natural-language SQL querying: **Demonstrated on a test dataset**
+- Automated data cleaning and user-approved remediation: **Future work**
+- Production deployment and hardening: **Pending**
+
+## 10. Next Immediate Development Goal
+
+The next priority is to improve and test the AI Copilot's correctness and reliability. This includes validating generated SQL, checking returned results against expected answers, handling failures, and evaluating the workflow on multiple datasets before extending the application toward automated data-quality remediation.
+
+---
+
+**End of Latest Project Progress Update**
+
